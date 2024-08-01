@@ -4,7 +4,6 @@ package com.example.hoidanit.exception;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -48,8 +47,7 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
 
-        if (e instanceof MethodArgumentNotValidException) {
-            MethodArgumentNotValidException ex = (MethodArgumentNotValidException) e;
+        if (e instanceof MethodArgumentNotValidException ex) {
             StringBuilder message = new StringBuilder("Validation failed: ");
             ex.getBindingResult().getFieldErrors().forEach(error ->
                     message.append(String.format("[%s: %s] ", error.getField(), error.getDefaultMessage()))

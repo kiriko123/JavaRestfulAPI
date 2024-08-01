@@ -2,7 +2,6 @@ package com.example.hoidanit.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;

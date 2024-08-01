@@ -1,6 +1,7 @@
 package com.example.hoidanit.service.impl;
 
 import com.example.hoidanit.dto.request.JobRequestDTO;
+import com.example.hoidanit.dto.response.JobResponseDTO;
 import com.example.hoidanit.dto.response.ResultPaginationResponse;
 import com.example.hoidanit.exception.ResourceNotFoundException;
 import com.example.hoidanit.model.Job;
@@ -93,7 +94,7 @@ public class JobServiceImpl implements JobService {
 
         return ResultPaginationResponse.builder()
                 .meta(meta)
-                .result(jobs.getContent())
+                .result(jobs.getContent().stream().map(JobResponseDTO::fromJobToJobResponse))
                 .build();
     }
 

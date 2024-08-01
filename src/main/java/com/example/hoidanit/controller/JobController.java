@@ -1,6 +1,7 @@
 package com.example.hoidanit.controller;
 
 import com.example.hoidanit.dto.request.JobRequestDTO;
+import com.example.hoidanit.dto.response.JobResponseDTO;
 import com.example.hoidanit.model.Job;
 import com.example.hoidanit.service.JobService;
 import com.turkraft.springfilter.boot.Filter;
@@ -25,11 +26,11 @@ public class JobController {
 
     @PostMapping
     public ResponseEntity<?> addJob(@Validated @RequestBody JobRequestDTO jobRequestDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(jobService.createJob(jobRequestDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(JobResponseDTO.fromJobToJobResponse(jobService.createJob(jobRequestDTO)));
     }
     @PutMapping("/{id}")
     public ResponseEntity<?> updateJob(@Validated @RequestBody JobRequestDTO jobRequestDTO, @PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(jobService.updateJob(id, jobRequestDTO));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(JobResponseDTO.fromJobToJobResponse(jobService.updateJob(id, jobRequestDTO)));
     }
     @GetMapping
     public ResponseEntity<?> getAllJobs(@Filter Specification<Job> specification, Pageable pageable) {

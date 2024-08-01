@@ -48,7 +48,10 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public void deleteSkill(long id) {
+        Skill skill = getSkill(id);
+        skill.getJobs().forEach(job -> job.getSkills().remove(skill));
 
+        skillRepository.delete(skill);
     }
 
     @Override

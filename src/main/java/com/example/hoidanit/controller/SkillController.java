@@ -40,4 +40,10 @@ public class SkillController {
         log.info("Get all skills");
         return ResponseEntity.ok().body(skillService.getSkills(specification, pageable));
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteSkill(@PathVariable long id) {
+        log.info("Delete skill request: {}", id);
+        skillService.deleteSkill(id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -62,10 +62,10 @@ public class JobServiceImpl implements JobService {
         job.setEndDate(jobRequestDTO.getEndDate());
         job.setLocation(jobRequestDTO.getLocation());
 
-        if (!skillList.isEmpty()){
+        /*if (!skillList.isEmpty()){
             job.setSkills(skillList);
-        }
-
+        }*/
+        job.setSkills(skillList);
         return jobRepository.save(job);
     }
 
@@ -103,9 +103,9 @@ public class JobServiceImpl implements JobService {
             if (skillRepository.existsById(skill.getId())){
                 skillList.add(skillRepository.findById(skill.getId()).orElse(null));
             }
-            else{
+            /*else{
                 throw new ResourceNotFoundException("Skill with id:= " + skill.getId() +" Not Found");
-            }
+            }*/
         }
         return skillList;
     }

@@ -47,3 +47,5 @@ khang:
     #100 days
     access-token-validity-in-seconds: 8640000
     refresh-token-validity-in-seconds: 8640000
+  upload-file:
+    base-uri: file:///D:/Study/Java6/upload/

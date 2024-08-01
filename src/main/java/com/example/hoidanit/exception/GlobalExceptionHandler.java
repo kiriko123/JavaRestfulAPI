@@ -98,6 +98,20 @@ public class GlobalExceptionHandler {
         return errorResponse;
     }
 
+    @ExceptionHandler(StorageException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleFileUploadException(StorageException e, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimestamp(new Date());
+        errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setError(HttpStatus.BAD_REQUEST.getReasonPhrase());
+        errorResponse.setMessage(e.getMessage());
+        return errorResponse;
+    }
+
+
+
     @ExceptionHandler({UsernameNotFoundException.class, BadCredentialsException.class})
     public ErrorResponse handleAuthenticationExceptions(Exception e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();

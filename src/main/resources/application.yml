@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+spring:
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+        default-page-size: 5
+  application:
+    name: hoidanit
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+      enabled: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/hoidanit?useSSL=false&serverTimezone=UTC
+    username: root
+    password: root
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        format_sql: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    open-in-view: true
+
+open:
+  api:
+    title: Api document
+    version: 1.0.0
+    description: This is Api
+    serverUrl: http://localhost:8080/
+    serverName: Server local
+    group: shopapp-api
+    packagesToScan: com.example.shopapp.controller
+
+api:
+  prefix: api/v1
+
+khang:
+  jwt:
+    base64-secret: ZNsuIEYem0dC12lgBymX2bCpRj8V2FYIJyVdwNjsCr+aZD4xVya98ZmdS9Yv5xwYjTzdQReKJDq5E76AxMebzQ==
+    #100 days
+    access-token-validity-in-seconds: 8640000
+    refresh-token-validity-in-seconds: 8640000

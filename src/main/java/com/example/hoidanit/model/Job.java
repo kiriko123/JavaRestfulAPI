@@ -58,4 +58,7 @@ public class Job {
         this.updatedAt = Instant.now();
         this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "" ;
     }
+    @JsonIgnore
+    @OneToMany(mappedBy = "job", fetch = FetchType.LAZY)
+    private List<Resume> resumes;
 }

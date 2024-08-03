@@ -1,50 +1,35 @@
 package com.example.hoidanit.model;
 
 import com.example.hoidanit.util.SecurityUtil;
-import com.example.hoidanit.util.constant.GenderEnum;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.hoidanit.util.constant.StatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.List;
 
 @Entity
-@Table(name = "users")
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "resumes")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class User {
+public class Resume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String username;
-    private String password;
+
     private String email;
 
-    private int age;
+    private String url;
 
     @Enumerated(EnumType.STRING)
-    private GenderEnum gender;
+    private StatusEnum status;
 
-    private String address;
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String refreshToken;
-
-    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
     private Instant createdAt;
-
-    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
     private Instant updatedAt;
-
-    private String createdBy;
     private String updatedBy;
-
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
+    private String createdBy;
 
     @PrePersist
     public void handleBeforeCreate(){
@@ -57,7 +42,11 @@ public class User {
         this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "" ;
     }
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Resume> resumes;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "job_id")
+    private Job job;
 }

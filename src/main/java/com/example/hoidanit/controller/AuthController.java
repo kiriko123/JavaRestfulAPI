@@ -135,7 +135,7 @@ public class AuthController {
         User currentUserDB = userService.findByEmail(email);
         if (currentUserDB != null) {
             LoginResponse.UserLogin userLogin = new
-                    LoginResponse.UserLogin(currentUserDB.getId(), currentUserDB.getEmail(), currentUserDB.getUsername());
+                    LoginResponse.UserLogin(currentUserDB.getId(), currentUserDB.getEmail(), currentUserDB.getUsername(), currentUserDB.getRole());
             loginResponse.setUser(userLogin);
         }
 

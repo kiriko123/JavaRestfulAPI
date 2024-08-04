@@ -91,7 +91,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void deleteRole(long id) {
-
+        Role role = getRole(id);
+        role.getPermissions().forEach(p -> p.getRoles().remove(role));
+        roleRepository.delete(role);
     }
 
     @Override

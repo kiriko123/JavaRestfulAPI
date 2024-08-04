@@ -65,11 +65,13 @@ public class SecurityConfig {
                 "/api/v1/email/**",
                 "/v3/api-docs/**",
                 "/swagger-ui/**",
-                "/swagger-ui.html"
+                "/swagger-ui.html",
+                "/api/v1/companies/**",
+                "/api/v1/jobs/**"
         };
 
         http
-                .csrf(c -> c.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         authz -> authz

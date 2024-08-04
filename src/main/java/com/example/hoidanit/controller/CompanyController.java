@@ -28,22 +28,31 @@ public class CompanyController {
         log.info("Create company request: {}", companyRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(companyService.createCompany(companyRequestDTO));
     }
+
     @GetMapping("")
     public ResponseEntity<?> getAllCompanies(
             @Filter Specification<Company> specification,
-            Pageable pageable){
+            Pageable pageable) {
         log.info("Get all companies");
         return ResponseEntity.ok().body(companyService.getAllCompanies(specification, pageable));
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCompany(@Valid @RequestBody CompanyRequestDTO companyRequestDTO, @Min(1) @PathVariable long id) {
         log.info("Update company request: {}", companyRequestDTO);
         return ResponseEntity.accepted().body(companyService.updateCompany(id, companyRequestDTO));
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCompany(@Min(1) @PathVariable long id) {
         log.info("Delete company request: {}", id);
         companyService.deleteCompany(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCompanyById(@Min(1) @PathVariable long id) {
+        log.info("Get company request: {}", id);
+        return ResponseEntity.ok().body(companyService.getCompany(id));
     }
 }

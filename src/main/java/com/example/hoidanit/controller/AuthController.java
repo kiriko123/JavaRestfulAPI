@@ -1,6 +1,7 @@
 package com.example.hoidanit.controller;
 
 import com.example.hoidanit.dto.request.LoginRequestDTO;
+import com.example.hoidanit.dto.request.UserCreateRequestDTO;
 import com.example.hoidanit.dto.response.LoginResponse;
 import com.example.hoidanit.model.User;
 import com.example.hoidanit.service.AuthService;
@@ -16,10 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
@@ -135,7 +133,7 @@ public class AuthController {
         User currentUserDB = userService.findByEmail(email);
         if (currentUserDB != null) {
             LoginResponse.UserLogin userLogin = new
-                    LoginResponse.UserLogin(currentUserDB.getId(), currentUserDB.getEmail(), currentUserDB.getUsername(), currentUserDB.getRole());
+                    LoginResponse.UserLogin(currentUserDB.getId(), currentUserDB.getEmail(), currentUserDB.getName(), currentUserDB.getRole());
             loginResponse.setUser(userLogin);
         }
 
@@ -183,6 +181,12 @@ public class AuthController {
                 .build();
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, deleteSpringCookies.toString()).body(null);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@Valid @RequestBody UserCreateRequestDTO userRequestDTO){
+        log.info("Create user : {}", userRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userRequestDTO));
     }
 
 }

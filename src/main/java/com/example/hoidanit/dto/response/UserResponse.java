@@ -18,7 +18,7 @@ public class UserResponse implements Serializable {
 
     private long id;
 
-    private String username;
+    private String name;
 
     private String email;
 
@@ -43,7 +43,7 @@ public class UserResponse implements Serializable {
 
         UserResponse userResponse =  UserResponse.builder()
                 .id(user.getId())
-                .username(user.getUsername())
+                .name(user.getName())
                 .email(user.getEmail())
                 .gender(user.getGender())
                 .address(user.getAddress())

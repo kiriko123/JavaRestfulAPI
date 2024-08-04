@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = userRepository.save(User.builder()
-                .username(userRequestDTO.getUsername())
+                .name(userRequestDTO.getName())
                 .password(passwordEncoder.encode(userRequestDTO.getPassword()))
                 .age(userRequestDTO.getAge())
                 .address(userRequestDTO.getAddress())
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUserName(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByName(username);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
                 user.setRole(role);
             }
         }
-        user.setUsername(userUpdateRequestDTO.getUsername());
+        user.setName(userUpdateRequestDTO.getName());
         user.setAddress(userUpdateRequestDTO.getAddress());
         user.setGender(userUpdateRequestDTO.getGender());
         user.setAge(userUpdateRequestDTO.getAge());

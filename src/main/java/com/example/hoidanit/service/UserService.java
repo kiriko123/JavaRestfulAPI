@@ -1,7 +1,6 @@
 package com.example.hoidanit.service;
 
 import com.example.hoidanit.dto.request.UserCreateRequestDTO;
-import com.example.hoidanit.dto.request.UserRequestDTO;
 import com.example.hoidanit.dto.request.UserUpdateRequestDTO;
 import com.example.hoidanit.dto.response.ResultPaginationResponse;
 import com.example.hoidanit.dto.response.UserResponse;

@@ -37,7 +37,7 @@ public class ResumeGetResponse implements Serializable {
                 .createdBy(resume.getCreatedBy())
                 .user(User.builder()
                         .id(resume.getUser().getId())
-                        .name(resume.getUser().getUsername())
+                        .name(resume.getUser().getName())
                         .build())
                 .job(Job.builder()
                         .id(resume.getJob().getId())

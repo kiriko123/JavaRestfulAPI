@@ -43,7 +43,7 @@ public class AuthServiceImpl implements AuthService{
         User currentUser = userService.findByEmail(loginRequestDTO.getUsername());
         if (currentUser != null) {
             LoginResponse.UserLogin userLogin = new
-                    LoginResponse.UserLogin(currentUser.getId(), currentUser.getEmail(), currentUser.getUsername(), currentUser.getRole());
+                    LoginResponse.UserLogin(currentUser.getId(), currentUser.getEmail(), currentUser.getName(), currentUser.getRole());
             loginResponse.setUser(userLogin);
         }
 
@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService{
         if (currentUser != null) {
             userLogin.setId(currentUser.getId());
             userLogin.setEmail(currentUser.getEmail());
-            userLogin.setName(currentUser.getUsername());
+            userLogin.setName(currentUser.getName());
             userLogin.setRole(currentUser.getRole());
             userGetAccount.setUser(userLogin);
         }

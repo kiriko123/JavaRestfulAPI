@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class UserCreateRequestDTO implements Serializable {
     @NotBlank
     @Size(min = 6, max = 20)
-    private String username;
+    private String name;
     @NotBlank
     @Size(min = 6, max = 20)
     private String password;

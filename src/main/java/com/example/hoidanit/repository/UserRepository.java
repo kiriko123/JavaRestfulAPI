@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> , JpaSpecificationExecutor<User> {
-    User findByUsername(String username);
+    User findByName(String name);
     User findByEmail(String email);
     boolean existsByEmail(String email);
     User findByEmailAndRefreshToken(String email, String refreshToken);

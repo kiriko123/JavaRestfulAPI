@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class UserUpdateRequestDTO implements Serializable {
     @NotBlank
     @Size(min = 6, max = 20)
-    private String username;
+    private String name;
     @NotNull
     private GenderEnum gender;
     @NotBlank

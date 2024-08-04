@@ -48,4 +48,9 @@ public class RoleController {
         roleService.deleteRole(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getRoleById(@Min(1) @PathVariable Long id) {
+        log.info("Getting role by id: {}", id);
+        return ResponseEntity.ok().body(roleService.getRole(id));
+    }
 }

@@ -5,6 +5,7 @@ import com.example.hoidanit.dto.request.permission.PermissionUpdateRequestDTO;
 import com.example.hoidanit.model.Permission;
 import com.example.hoidanit.service.PermissionService;
 import com.turkraft.springfilter.boot.Filter;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +39,12 @@ public class PermissionController {
     public ResponseEntity<?> getAllPermissions(@Filter Specification<Permission> specification, Pageable pageable) {
         log.info("Get all permissions");
         return ResponseEntity.ok().body(permissionService.getPermissions(specification, pageable));
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePermission(@Min(1)@PathVariable Long id) {
+        log.info("Delete permission: {}", id);
+        permissionService.deletePermission(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

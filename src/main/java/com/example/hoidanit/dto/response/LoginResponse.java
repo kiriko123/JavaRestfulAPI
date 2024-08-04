@@ -1,5 +1,6 @@
 package com.example.hoidanit.dto.response;
 
+import com.example.hoidanit.model.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -22,7 +23,8 @@ public class LoginResponse implements Serializable {
     public static class UserLogin implements Serializable {
         private long id;
         private String email;
-        private String username;
+        private String name;
+        private Role role;
     }
     @Getter
     @Setter
@@ -30,5 +32,15 @@ public class LoginResponse implements Serializable {
     @AllArgsConstructor
     public static class UserGetAccount {
         private UserLogin user;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserInsideToken {
+        private long id;
+        private String email;
+        private String name;
     }
 }

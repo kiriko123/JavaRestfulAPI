@@ -95,6 +95,8 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public void deletePermission(long id) {
-
+        Permission permission = getPermission(id);
+        permission.getRoles().forEach(r -> r.getPermissions().remove(permission));
+        permissionRepository.delete(permission);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.hoidanit.model;
 
 import com.example.hoidanit.util.SecurityUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -49,4 +50,8 @@ public class Role {
         this.updatedAt = Instant.now();
         this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
     }
+
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
+    @JsonIgnore
+    List<User> users;
 }

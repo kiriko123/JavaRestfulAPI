@@ -12,6 +12,11 @@ import com.example.hoidanit.repository.JobRepository;
 import com.example.hoidanit.repository.ResumeRepository;
 import com.example.hoidanit.repository.UserRepository;
 import com.example.hoidanit.service.ResumeService;
+import com.example.hoidanit.util.SecurityUtil;
+import com.turkraft.springfilter.converter.FilterSpecification;
+import com.turkraft.springfilter.converter.FilterSpecificationConverter;
+import com.turkraft.springfilter.parser.FilterParser;
+import com.turkraft.springfilter.parser.node.FilterNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,16 +29,18 @@ public class ResumeServiceImpl implements ResumeService {
     private final ResumeRepository resumeRepository;
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
+    private final FilterParser filterParser;
+    private final FilterSpecificationConverter filterSpecificationConverter;
 
     @Override
     public ResumeCreateResponse createResume(ResumeCreateRequestDTO resumeCreateRequestDTO) {
 
         //check job
-        if(!jobRepository.existsById(resumeCreateRequestDTO.getJob().getId())){
+        if (!jobRepository.existsById(resumeCreateRequestDTO.getJob().getId())) {
             throw new ResourceNotFoundException("Job not found with id = " + resumeCreateRequestDTO.getJob().getId());
         }
         //check user
-        if (!userRepository.existsById(resumeCreateRequestDTO.getUser().getId())){
+        if (!userRepository.existsById(resumeCreateRequestDTO.getUser().getId())) {
             throw new ResourceNotFoundException("User not found with id = " + resumeCreateRequestDTO.getUser().getId());
         }
 
@@ -87,6 +94,29 @@ public class ResumeServiceImpl implements ResumeService {
     public ResultPaginationResponse getAll(Specification<Resume> specification, Pageable pageable) {
 
         Page<Resume> resumes = resumeRepository.findAll(specification, pageable);
+
+        ResultPaginationResponse.Meta meta = ResultPaginationResponse.Meta.builder()
+                .total(resumes.getTotalElements())
+                .pages(resumes.getTotalPages())
+                .page(pageable.getPageNumber() + 1)
+                .pageSize(pageable.getPageSize())
+                .build();
+
+        return ResultPaginationResponse.builder()
+                .result(resumes.getContent().stream().map(ResumeGetResponse::fromResumeToResumeGetResponse))
+                .meta(meta)
+                .build();
+    }
+
+    @Override
+    public ResultPaginationResponse fetchResumeByUser(Pageable pageable) {
+        //query builder
+        String email = SecurityUtil.getCurrentUserLogin().orElse("");
+
+        FilterNode node = filterParser.parse("email='" + email + "'");
+        FilterSpecification<Resume> spec = filterSpecificationConverter.convert(node);
+
+        Page<Resume> resumes = resumeRepository.findAll(spec, pageable);
 
         ResultPaginationResponse.Meta meta = ResultPaginationResponse.Meta.builder()
                 .total(resumes.getTotalElements())

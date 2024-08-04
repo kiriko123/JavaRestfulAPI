@@ -28,15 +28,16 @@ public class UserResponse implements Serializable {
 
     private int age;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
     private Instant createdAt;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
     private Instant updatedAt;
 
     private String createdBy;
     private String updatedBy;
     private Company company;
+    private Role role;
 
     public static UserResponse fromUserToUserResponse(User user) {
 
@@ -59,18 +60,31 @@ public class UserResponse implements Serializable {
                     .name(user.getCompany().getName())
                     .build());
         }else{
-            userResponse.setCompany(Company.builder()
-                    .id(0)
-                    .name(null)
-                    .build());
+            userResponse.setCompany(null);
         }
 
+        if (user.getRole() != null) {
+            userResponse.setRole(Role.builder()
+                    .id(user.getRole().getId())
+                    .name(user.getRole().getName())
+                    .build());
+        }else{
+            userResponse.setRole(null);
+        }
         return userResponse;
 
     }
     @Getter
+    @Setter
     @Builder
     public static class Company{
+        private long id;
+        private String name;
+    }
+    @Getter
+    @Setter
+    @Builder
+    public static class Role{
         private long id;
         private String name;
     }

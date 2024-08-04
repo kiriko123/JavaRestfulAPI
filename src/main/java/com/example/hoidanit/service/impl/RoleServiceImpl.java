@@ -3,6 +3,7 @@ package com.example.hoidanit.service.impl;
 import com.example.hoidanit.dto.request.role.RoleCreateRequestDTO;
 import com.example.hoidanit.dto.request.role.RoleUpdateRequestDTO;
 import com.example.hoidanit.dto.response.ResultPaginationResponse;
+import com.example.hoidanit.exception.ResourceNotFoundException;
 import com.example.hoidanit.model.Permission;
 import com.example.hoidanit.model.Role;
 import com.example.hoidanit.repository.PermissionRepository;
@@ -28,7 +29,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getRole(long id) {
-        return roleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Role not found"));
+        return roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Role not found"));
     }
 
     @Override
@@ -92,7 +93,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void deleteRole(long id) {
         Role role = getRole(id);
-        role.getPermissions().forEach(p -> p.getRoles().remove(role));
+        // role la cha permission la con
+        //role.getPermissions().forEach(p -> p.getRoles().remove(role));
         roleRepository.delete(role);
     }
 

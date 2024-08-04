@@ -18,4 +18,6 @@ public interface ResumeService {
     Resume getResume(long id);
     ResumeGetResponse getOne(long id);
     ResultPaginationResponse getAll(Specification<Resume> specification, Pageable pageable);
+
+    ResultPaginationResponse fetchResumeByUser(Pageable pageable);
 }

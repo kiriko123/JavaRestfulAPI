@@ -52,4 +52,8 @@ public class ResumeController {
         log.info("Get all");
         return ResponseEntity.ok().body(resumeService.getAll(specification, pageable));
     }
+    @PostMapping("/by-user")
+    public ResponseEntity<?> fetchResumeByUser(Pageable pageable) {
+        return ResponseEntity.ok().body(resumeService.fetchResumeByUser(pageable));
+    }
 }

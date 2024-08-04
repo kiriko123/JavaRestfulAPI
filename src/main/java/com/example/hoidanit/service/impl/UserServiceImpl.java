@@ -7,8 +7,10 @@ import com.example.hoidanit.dto.response.UserResponse;
 import com.example.hoidanit.exception.InvalidDataException;
 import com.example.hoidanit.exception.ResourceNotFoundException;
 import com.example.hoidanit.model.Company;
+import com.example.hoidanit.model.Role;
 import com.example.hoidanit.model.User;
 import com.example.hoidanit.repository.CompanyRepository;
+import com.example.hoidanit.repository.RoleRepository;
 import com.example.hoidanit.repository.UserRepository;
 import com.example.hoidanit.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,19 +29,25 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CompanyRepository companyRepository;
+    private final RoleRepository roleRepository;
 
     @Override
     public UserResponse save(UserCreateRequestDTO userRequestDTO) {
 
-        if(userRepository.existsByEmail(userRequestDTO.getEmail())) {
+        if (userRepository.existsByEmail(userRequestDTO.getEmail())) {
             throw new InvalidDataException("Email already exists");
         }
         Company company = new Company();
-        if(userRequestDTO.getCompany() != null){
+        if (userRequestDTO.getCompany() != null) {
             company = companyRepository.findById(userRequestDTO.getCompany().getId()).orElse(null);
         }
 
-        User user =  userRepository.save(User.builder()
+        Role role = new Role();
+        if (userRequestDTO.getRole() != null) {
+            role = roleRepository.findById(userRequestDTO.getRole().getId()).orElse(null);
+        }
+
+        User user = userRepository.save(User.builder()
                 .username(userRequestDTO.getUsername())
                 .password(passwordEncoder.encode(userRequestDTO.getPassword()))
                 .age(userRequestDTO.getAge())
@@ -47,6 +55,7 @@ public class UserServiceImpl implements UserService {
                 .gender(userRequestDTO.getGender())
                 .email(userRequestDTO.getEmail())
                 .company(company)
+                .role(role)
                 .build());
 
         return UserResponse.fromUserToUserResponse(user);
@@ -60,17 +69,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse update(long id, UserUpdateRequestDTO userUpdateRequestDTO) {
         User user = findById(id);
-        if(userUpdateRequestDTO.getCompany() != null){
+        if (userUpdateRequestDTO.getCompany() != null) {
             Company company = companyRepository.findById(userUpdateRequestDTO.getCompany().getId()).orElse(null);
-            if(company != null){
+            if (company != null) {
                 user.setCompany(company);
+            }
+        }
+        if (userUpdateRequestDTO.getRole() != null) {
+            Role role = roleRepository.findById(userUpdateRequestDTO.getRole().getId()).orElse(null);
+            if (role != null) {
+                user.setRole(role);
             }
         }
         user.setUsername(userUpdateRequestDTO.getUsername());
         user.setAddress(userUpdateRequestDTO.getAddress());
         user.setGender(userUpdateRequestDTO.getGender());
         user.setAge(userUpdateRequestDTO.getAge());
-
 
         return UserResponse.fromUserToUserResponse(userRepository.save(user));
     }
@@ -114,7 +128,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserToken(String token, String email) {
         User user = findByEmail(email);
-        if(user != null){
+        if (user != null) {
             user.setRefreshToken(token);
             userRepository.save(user);
         }

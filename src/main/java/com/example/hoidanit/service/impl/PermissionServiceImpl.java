@@ -99,4 +99,9 @@ public class PermissionServiceImpl implements PermissionService {
         permission.getRoles().forEach(r -> r.getPermissions().remove(permission));
         permissionRepository.delete(permission);
     }
+
+    @Override
+    public long countPermissions() {
+        return permissionRepository.count();
+    }
 }

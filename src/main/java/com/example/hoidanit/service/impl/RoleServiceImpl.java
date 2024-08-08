@@ -115,4 +115,9 @@ public class RoleServiceImpl implements RoleService {
                 .result(roles.getContent())
                 .build();
     }
+
+    @Override
+    public long countRoles() {
+        return roleRepository.count();
+    }
 }

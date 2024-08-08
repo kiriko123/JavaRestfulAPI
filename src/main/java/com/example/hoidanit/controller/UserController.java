@@ -26,7 +26,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<?> createUser( @Validated @RequestBody UserCreateRequestDTO userRequestDTO) {
         log.info("Create user : {}", userRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userRequestDTO));

@@ -1,8 +1,12 @@
 package com.example.hoidanit.service.impl;
 
 import com.example.hoidanit.dto.request.LoginRequestDTO;
+import com.example.hoidanit.dto.request.user.UserRegisterRequestDTO;
 import com.example.hoidanit.dto.response.LoginResponse;
+import com.example.hoidanit.dto.response.UserResponse;
+import com.example.hoidanit.exception.InvalidDataException;
 import com.example.hoidanit.model.User;
+import com.example.hoidanit.repository.UserRepository;
 import com.example.hoidanit.service.AuthService;
 import com.example.hoidanit.service.UserService;
 import com.example.hoidanit.util.SecurityUtil;
@@ -12,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,6 +28,10 @@ public class AuthServiceImpl implements AuthService{
     private final SecurityUtil securityUtil;
 
     private final UserService userService;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final UserRepository userRepository;
 
     @Value("${khang.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpiration;
@@ -75,5 +84,21 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public LoginResponse getRefreshToken(String refreshToken) {
         return null;
+    }
+
+    @Override
+    public UserResponse register(UserRegisterRequestDTO userRegisterRequestDTO) {
+        if (userRepository.existsByEmail(userRegisterRequestDTO.getEmail())) {
+            throw new InvalidDataException("Email already exists");
+        }
+
+        return UserResponse.fromUserToUserResponse(userRepository.save(User.builder()
+                        .age(userRegisterRequestDTO.getAge())
+                        .address(userRegisterRequestDTO.getAddress())
+                        .email(userRegisterRequestDTO.getEmail())
+                        .name(userRegisterRequestDTO.getName())
+                        .gender(userRegisterRequestDTO.getGender())
+                        .password(passwordEncoder.encode(userRegisterRequestDTO.getPassword()))
+                .build()));
     }
 }

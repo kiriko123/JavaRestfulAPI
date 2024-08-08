@@ -13,4 +13,6 @@ public interface PermissionService {
     Permission updatePermission(PermissionUpdateRequestDTO permissionUpdateRequestDTO);
     ResultPaginationResponse getPermissions(Specification<Permission> specification, Pageable pageable);
     void deletePermission(long id);
+
+    long countPermissions();
 }

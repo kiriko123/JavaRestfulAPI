@@ -2,6 +2,7 @@ package com.example.hoidanit.controller;
 
 import com.example.hoidanit.dto.request.LoginRequestDTO;
 import com.example.hoidanit.dto.request.UserCreateRequestDTO;
+import com.example.hoidanit.dto.request.user.UserRegisterRequestDTO;
 import com.example.hoidanit.dto.response.LoginResponse;
 import com.example.hoidanit.model.User;
 import com.example.hoidanit.service.AuthService;
@@ -180,13 +181,15 @@ public class AuthController {
                 .maxAge(0)
                 .build();
 
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, deleteSpringCookies.toString()).body(null);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, deleteSpringCookies.toString())
+                .body(null);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody UserCreateRequestDTO userRequestDTO){
-        log.info("Create user : {}", userRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userRequestDTO));
+    public ResponseEntity<?> register(@Valid @RequestBody UserRegisterRequestDTO userRegisterRequestDTO){
+        log.info("Create user : {}", userRegisterRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(userRegisterRequestDTO));
     }
 
 }

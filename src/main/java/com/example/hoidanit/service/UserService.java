@@ -18,4 +18,6 @@ public interface UserService {
     User findByEmail(String email);
     void updateUserToken(String token, String email);
     User getUserByEmailAndRefreshToken(String email, String refreshToken);
+
+    long countAllUser();
 }

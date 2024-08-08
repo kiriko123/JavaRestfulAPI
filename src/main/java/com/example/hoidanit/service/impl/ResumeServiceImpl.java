@@ -7,12 +7,17 @@ import com.example.hoidanit.dto.response.resume.ResumeCreateResponse;
 import com.example.hoidanit.dto.response.resume.ResumeGetResponse;
 import com.example.hoidanit.dto.response.resume.ResumeUpdateResponse;
 import com.example.hoidanit.exception.ResourceNotFoundException;
+import com.example.hoidanit.model.Company;
+import com.example.hoidanit.model.Job;
 import com.example.hoidanit.model.Resume;
+import com.example.hoidanit.model.User;
 import com.example.hoidanit.repository.JobRepository;
 import com.example.hoidanit.repository.ResumeRepository;
 import com.example.hoidanit.repository.UserRepository;
 import com.example.hoidanit.service.ResumeService;
+import com.example.hoidanit.service.UserService;
 import com.example.hoidanit.util.SecurityUtil;
+import com.turkraft.springfilter.builder.FilterBuilder;
 import com.turkraft.springfilter.converter.FilterSpecification;
 import com.turkraft.springfilter.converter.FilterSpecificationConverter;
 import com.turkraft.springfilter.parser.FilterParser;
@@ -23,6 +28,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
@@ -31,6 +39,8 @@ public class ResumeServiceImpl implements ResumeService {
     private final UserRepository userRepository;
     private final FilterParser filterParser;
     private final FilterSpecificationConverter filterSpecificationConverter;
+    private final FilterBuilder filterBuilder;
+    private final UserService userService;
 
     @Override
     public ResumeCreateResponse createResume(ResumeCreateRequestDTO resumeCreateRequestDTO) {
@@ -93,7 +103,26 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public ResultPaginationResponse getAll(Specification<Resume> specification, Pageable pageable) {
 
-        Page<Resume> resumes = resumeRepository.findAll(specification, pageable);
+        List<Long> arrJobIds = null;
+        String email = SecurityUtil.getCurrentUserLogin().orElse("");
+        User currentUser = this.userService.findByEmail(email);
+        if (currentUser != null) {
+            Company userCompany = currentUser.getCompany();
+            if (userCompany != null) {
+                List<Job> companyJobs = userCompany.getJobs();
+                if (companyJobs != null && !companyJobs.isEmpty()) {
+                    arrJobIds = companyJobs.stream().map(x -> x.getId())
+                            .collect(Collectors.toList());
+                }
+            }
+        }
+
+        Specification<Resume> jobInSpec = filterSpecificationConverter.convert(filterBuilder.field("job")
+                .in(filterBuilder.input(arrJobIds)).get());
+
+        Specification<Resume> finalSpec = jobInSpec.and(specification);
+
+        Page<Resume> resumes = resumeRepository.findAll(finalSpec, pageable);
 
         ResultPaginationResponse.Meta meta = ResultPaginationResponse.Meta.builder()
                 .total(resumes.getTotalElements())

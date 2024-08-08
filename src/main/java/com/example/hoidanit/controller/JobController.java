@@ -41,4 +41,8 @@ public class JobController {
         jobService.deleteJob(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getJobById(@Min(1) @PathVariable Long id) {
+        return ResponseEntity.ok().body(jobService.getJob(id));
+    }
 }

@@ -2,6 +2,17 @@ server:
   port: 8080
 
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tankhang101a@gmail.com
+    password: eaqb ttij gfws hijr
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   data:
     web:
       pageable:
@@ -28,18 +39,7 @@ spring:
       ddl-auto: none
     open-in-view: true
 
-open:
-  api:
-    title: Api document
-    version: 1.0.0
-    description: This is Api
-    serverUrl: http://localhost:8080/
-    serverName: Server local
-    group: shopapp-api
-    packagesToScan: com.example.shopapp.controller
 
-api:
-  prefix: api/v1
 
 khang:
   jwt:
@@ -49,3 +49,4 @@ khang:
     refresh-token-validity-in-seconds: 8640000
   upload-file:
     base-uri: file:///D:/Study/Java6/upload/
+
